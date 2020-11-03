@@ -1,7 +1,7 @@
 package int101.banking;
 
 public class AccountHistory {
-    private AccountTransaction history[];
+    private final AccountTransaction history[];
     private int count;
 
     public AccountHistory(int size) {
@@ -15,10 +15,10 @@ public class AccountHistory {
         }
         return null;
     }
-    
+
     @Override
     public String toString() {
-        // ToDo: show all transaction hisotry
-        return "";
+        // ToDo: return String representing all transactions
+        return null;
     }
 }
