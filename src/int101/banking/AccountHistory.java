@@ -18,7 +18,18 @@ public class AccountHistory {
 
     @Override
     public String toString() {
-        // ToDo: return String representing all transactions
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            sb.append(history[i].toString()).append("\n\t");
+        }
+        return sb.toString();
+    }
+    
+    public String simpleToString() {
+        String result = "";
+        for (int i = 0; i < count; i++) {
+            result += history[i].toString() + "\n";
+        }
+        return result;
     }
 }

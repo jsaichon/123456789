@@ -1,12 +1,17 @@
 
+import int101.banking.AccountHistory;
+import int101.banking.AccountTransaction;
 import int101.banking.BankAccount;
+import int101.banking.TransactionType;
 import int101.base.Person;
+import java.math.BigDecimal;
 
 public class Testing {
 
     public static void main(String[] args) {
-        testPerson();
-        testBankAccount();
+        //testPerson();
+        //testBankAccount();
+        testAccountHistory();
     }
 
     private static void testPerson() {
@@ -40,5 +45,15 @@ public class Testing {
         System.out.println("transfer to new account 400 and 10000");
         ac0.transferTo(ac1, 400).transferTo(ac2, 10000);
         System.out.println(ac0 + "\n" + ac1 + "\n" + ac2);        
+    }
+
+    private static void testAccountHistory() {
+        AccountHistory ah = new AccountHistory(10);
+        ah.append(new AccountTransaction(TransactionType.OPEN,new BigDecimal(0)));
+        ah.append(new AccountTransaction(TransactionType.DEPOSIT,new BigDecimal(1000)));
+        ah.append(new AccountTransaction(TransactionType.WITHDRAW,new BigDecimal(200)));
+        ah.append(new AccountTransaction(TransactionType.TRANSFER_OUT,new BigDecimal(500)));
+        ah.append(new AccountTransaction(TransactionType.TRANSFER_IN,new BigDecimal(300)));
+        System.out.println(ah);
     }
 }

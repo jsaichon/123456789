@@ -8,15 +8,16 @@ public class BankAccount {
     private final int accountNo;
     private final String accountName;
     private final Person accountOwner;
-    private AccountHistory history;
+    private final AccountHistory history;
     private BigDecimal balance;
 
     public BankAccount(String accountName, Person accountOwner) {
         this.accountNo = nextAccountNo++;
         this.accountName = accountName;
         this.accountOwner = accountOwner;
-        // ToDo: accountHistory ...
+        this.history = new AccountHistory(10);
         this.balance = new BigDecimal(0);
+        this.history.append(new AccountTransaction(TransactionType.OPEN, this.balance));
     }
 
     /* ToDo: 
@@ -29,17 +30,27 @@ public class BankAccount {
     }
     
     public BankAccount deposit(double amount) {
+        return deposit(amount, true);
+    }
+    
+    public BankAccount deposit(double amount, boolean log) {
         if (amount<=0) return null;
-        balance = balance.add(new BigDecimal(amount));
-        // ToDo: accountHistory ...
+        BigDecimal d = new BigDecimal(amount);
+        balance = balance.add(d);
+        if (log) this.history.append(new AccountTransaction(TransactionType.DEPOSIT, d));
         return this;
     }
     
     public BankAccount withdraw(double amount) {
+        return withdraw(amount, true);
+    }
+    
+    public BankAccount withdraw(double amount, boolean log) {
         if (amount<=0) return null;
         if (balance.doubleValue()<amount) return null;
-        balance = balance.subtract(new BigDecimal(amount));
-        // ToDo: accountHistory ...
+        BigDecimal d = new BigDecimal(amount);
+        balance = balance.subtract(d);
+        if (log) this.history.append(new AccountTransaction(TransactionType.WITHDRAW, d));
         return this;
     }
     
@@ -51,10 +62,11 @@ public class BankAccount {
     */
     public BankAccount transferTo(BankAccount to, double amount) {
         if (to==null) return null;
-        if (withdraw(amount)==null) return null;
-        to.deposit(amount);
-        // ToDo: accountHistory ... this
-        // ToDo: accountHistory ... to
+        if (withdraw(amount, false)==null) return null;
+        to.deposit(amount, false);
+        BigDecimal d = new BigDecimal(amount);
+        this.history.append(new AccountTransaction(TransactionType.TRANSFER_OUT, d));
+        to.history.append(new AccountTransaction(TransactionType.TRANSFER_IN, d));
         return this;
     }
 
